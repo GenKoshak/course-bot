@@ -8,13 +8,13 @@ The bot is built upon pyTelegramBotAPI and its functionality is based on asking 
 The repo is uploaded in order to be deployed on Heroku later on.
 As of currently 10 scenarious out 90 have been completed.
 
-### code
+## code
 The current repo contains following files:
-#### course_bot.py
+### course_bot.py
 The main executable file which contains the bot token and all the message handlers that govern the conversation.
 
-#### markups.py
+### markups.py
 A list of all the keyboard markups used in course_bot.py
 
-#### bot_phrases.py
+### bot_phrases.py
 A dictionary containing all the button names for the keyboard markups.
