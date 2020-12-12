@@ -2,8 +2,8 @@ import telebot
 import markups as m
 from bot_phrases import BOT_PHRASES
 
-bot = telebot.TeleBot('1401931481:AAEHCbxpLvUA1SykhzsHVlKxFtug27tw7SM', parse_mode=None)
-is_running: bool = False
+bot = telebot.TeleBot('1401931481:AAEDeXGiAs--pNDMTm6bcUsZmi2yk29refQ', parse_mode=None)
+is_running = False
 name = []
 bot_memory = []
 
@@ -15,19 +15,36 @@ def start_handler(message):
     if not is_running:
         chat_id = message.chat.id
         text = message.text
-        if len(name) == 0:
-            msg = bot.send_message(chat_id, 'Здравствуйте! Меня зовут Ира. Я чат-бот компании Свобода Слова. '
-                                            'Я могу подобрать вам программу по обучению английскому языку в '
-                                            'нашей компании.'
-                                   , reply_markup=m.start_markup)
-            bot.register_next_step_handler(msg, course_sign_up)
-            is_running = True
-        else:
-            msg = bot.send_message(chat_id, 'Итак, ' + str(name) + ', как давно вы изучаете английский?',
-                                   reply_markup=m.how_long_markup)
-            bot.register_next_step_handler(msg, how_regular)
+        msg = bot.send_message(chat_id, 'Здравствуйте! Меня зовут Ирина. Я чат-бот компании Свобода Слова. '
+                                        'Я могу подобрать вам программу по обучению английскому языку в '
+                                        'нашей компании.'
+                               , reply_markup=m.start_markup)
+        bot.register_next_step_handler(msg, course_sign_up)
+        print(chat_id)
+        is_running = True
+
+# def start_handler(message):
+#     global name
+#     global is_running
+#     if not is_running:
+#         chat_id = message.chat.id
+#         text = message.text
+#         if text == 'Закончить поиск':
+#             name = []
+#         if len(name) == 0:
+#             msg = bot.send_message(chat_id, 'Здравствуйте! Меня зовут Ирина. Я чат-бот компании Свобода Слова. '
+#                                             'Я могу подобрать вам программу по обучению английскому языку в '
+#                                             'нашей компании.'
+#                                    , reply_markup=m.start_markup)
+#             bot.register_next_step_handler(msg, course_sign_up)
+#             is_running = True
+#         else:
+#             msg = bot.send_message(chat_id, 'Итак, ' + str(name) + ', как давно вы изучаете английский?',
+#                                    reply_markup=m.how_long_markup)
+#             bot.register_next_step_handler(msg, how_regular)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def course_sign_up(message):
     chat_id = message.chat.id
     text = message.text
@@ -35,6 +52,7 @@ def course_sign_up(message):
     bot.register_next_step_handler(msg, how_long)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def how_long(message):
     global name
     chat_id = message.chat.id
@@ -49,6 +67,7 @@ def how_long(message):
     bot.register_next_step_handler(msg, how_regular)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def how_regular(message):
     global is_running
     global bot_memory
@@ -69,6 +88,7 @@ def how_regular(message):
         get_answer('beginner', chat_id, 3, m.finish_course_selection)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def regularity(message):
     global is_running
     chat_id = message.chat.id
@@ -94,6 +114,7 @@ def regularity(message):
         is_running = False
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def level_rare(message):
     chat_id = message.chat.id
     text = message.text
@@ -108,11 +129,16 @@ def level_rare(message):
             bot.register_next_step_handler(msg, l_rare_goals)
     elif text == 'Базовый. Испытываю трудности при использовании языка':
         if 'childhood' in bot_memory:
-            pass
+            msg = bot.send_message(chat_id, 'Для каких целей вы бы хотели продолжить изучать английский язык?',
+                                   reply_markup=m.l_rare_goals)
+            bot.register_next_step_handler(msg, not_ready)
         elif 'few_years' in bot_memory:
-            pass
+            msg = bot.send_message(chat_id, 'Для каких целей вы бы хотели продолжить изучать английский язык?',
+                                   reply_markup=m.l_rare_goals)
+            bot.register_next_step_handler(msg, not_ready)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def lang_level_in_school(message):
     global is_running
     chat_id = message.chat.id
@@ -130,6 +156,7 @@ def lang_level_in_school(message):
         bot.register_next_step_handler(msg, lls_high_goals)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def l_rare_goals(message):
     global is_running
     chat_id = message.chat.id
@@ -142,6 +169,7 @@ def l_rare_goals(message):
         get_answer('nolls_ce_travel', chat_id, 4, m.finish_course_selection)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def lls_mid_goals(message):
     global is_running
     chat_id = message.chat.id
@@ -154,6 +182,7 @@ def lls_mid_goals(message):
         get_answer('ee_travel', chat_id, 4, m.finish_course_selection)
 
 
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def lls_high_goals(message):
     global is_running
     chat_id = message.chat.id
@@ -168,11 +197,13 @@ def lls_high_goals(message):
 
 def not_ready(message):
     global name
+    global is_running
     chat_id = message.chat.id
     msg = bot.send_message(chat_id, 'У меня больше нет вопросов, как и предложений. Скоро я буду значительно '
                                     'умнее и способнее, а пока предлагаю повторить',
                            reply_markup=m.finish_course_selection)
     bot.register_next_step_handler(msg, start_handler)
+    is_running = False
 
 
 def get_answer(bot_phrase, chat_id, number, reply_markup):
@@ -185,4 +216,6 @@ def get_answer(bot_phrase, chat_id, number, reply_markup):
     return msg
 
 
-bot.polling(none_stop=True)
+if __name__ == "__main__":
+    bot.infinity_polling()
+# bot.polling(none_stop=True)

@@ -21,6 +21,7 @@ def define_markup(markup_name, width, resize):
 
 
 start_markup = define_markup('start_markup', 1, True)
+
 how_long_markup = define_markup('how_long_markup', 2, True)
 
 how_regular_markup = define_markup('how_regular_markup', 1, True)

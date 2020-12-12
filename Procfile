@@ -1,1 +1,1 @@
-web: python3 course_bot.py
+bot: python3 course_bot.py
