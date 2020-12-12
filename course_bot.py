@@ -2,7 +2,7 @@ import telebot
 import markups as m
 from bot_phrases import BOT_PHRASES
 
-bot = telebot.TeleBot('1401931481:AAEDeXGiAs--pNDMTm6bcUsZmi2yk29refQ', parse_mode=None)
+bot = telebot.TeleBot(token, parse_mode=None)
 is_running = False
 name = []
 bot_memory = []
